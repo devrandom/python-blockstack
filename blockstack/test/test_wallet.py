@@ -1,5 +1,5 @@
 from blockstack.client import BlockstackClient
-from unittest.mock import MagicMock
+from mock import MagicMock
 import unittest
 
 __author__ = 'devrandom'

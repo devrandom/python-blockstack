@@ -1,7 +1,8 @@
 import json
 import logging
 import platform
-from urllib.parse import urlencode, urlparse, parse_qs
+# noinspection PyUnresolvedReferences
+from six.moves.urllib.parse import urlencode, urlparse, parse_qs
 from requests import Session, Request
 from six import iteritems, integer_types, binary_type, string_types
 from ..util import UNSET_TIMEOUT, BlockstackRestException
