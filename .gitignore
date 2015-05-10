@@ -1,0 +1,10 @@
+*.bin
+.idea
+*.iml
+*.egg-info
+*.pyc
+dist
+build
+*.swp
+*.hex
+.ipynb_checkpoints
