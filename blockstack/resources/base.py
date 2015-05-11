@@ -5,7 +5,7 @@ import platform
 from six.moves.urllib.parse import urlencode, urlparse, parse_qs
 from requests import Session, Request
 from six import iteritems, integer_types, binary_type, string_types
-from ..util import UNSET_TIMEOUT, BlockstackRestException
+from ..util import UNSET_TIMEOUT, BlockstackRestException, BlockstackException
 from ..version import __version__
 
 __author__ = 'devrandom'
@@ -49,17 +49,7 @@ def _make_request(method, url, params=None, data=None, headers=None,
                              'binary, or string')
 
     if data is not None:
-        udata = {}
-        for k, v in iteritems(data):
-            key = k.encode('utf-8')
-            if isinstance(v, (list, tuple, set)):
-                udata[key] = [encode_atom(x) for x in v]
-            elif isinstance(v, (integer_types, binary_type, string_types)):
-                udata[key] = encode_atom(v)
-            else:
-                raise ValueError('data should be an integer, '
-                                 'binary, or string, or sequence ')
-        data = urlencode(udata, doseq=True)
+        data = json.dumps(data)
 
     if params is not None:
         enc_params = urlencode(params, doseq=True)
@@ -93,7 +83,7 @@ def make_request(method, uri, **kwargs):
     headers["Accept-Charset"] = "utf-8"
 
     if method == "POST" and "Content-Type" not in headers:
-        headers["Content-Type"] = "application/x-www-form-urlencoded"
+        headers["Content-Type"] = "application/json"
 
     kwargs["headers"] = headers
 
@@ -184,6 +174,18 @@ class InstanceResource(Resource):
             parent.timeout
         )
 
+    def load_subresources(self):
+        """
+        Load all subresources
+        """
+        for resource in self.subresources:
+            list_resource = resource(
+                self.uri,
+                self.parent.auth,
+                self.parent.timeout
+            )
+            self.__dict__[list_resource.key] = list_resource
+
     def load(self, entries):
         self.__dict__.update(entries)
 
@@ -214,6 +216,10 @@ class ListResource(Resource):
     def __init__(self, *args, **kwargs):
         super(ListResource, self).__init__(*args, **kwargs)
 
+    @property
+    def key(self):
+        return self.name.lower()
+
     def get(self, id):
         """ Get an instance resource by its id
         Usage:
@@ -234,6 +240,17 @@ class ListResource(Resource):
         if self.instance.id_key not in item:
             item[self.instance.id_key] = id
         return self.load_instance(item)
+
+    def get_instances(self, params):
+        """
+        Query the list resource for a list of InstanceResources.
+        Raises a :exc:`~twilio.TwilioRestException` if requesting a page of
+        results that does not exist.
+        :param dict params: List of URL parameters to be included in request
+        """
+        resp, page = self.request("GET", self.uri, params=params)
+
+        return [self.load_instance(ir) for ir in page]
 
     def create_instance(self, body):
         """
@@ -286,6 +303,7 @@ class ListResource(Resource):
         while True:
             resp, page = self.request("GET", self.uri, params=params)
 
+            # FIXME
             if self.key not in page:
                 raise StopIteration()
 
@@ -301,6 +319,7 @@ class ListResource(Resource):
     def load_instance(self, data):
         instance = self.instance(self, data[self.instance.id_key])
         instance.load(data)
+        instance.load_subresources()
         return instance
 
     def __str__(self):
