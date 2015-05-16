@@ -18,7 +18,7 @@ class WalletTest(unittest.TestCase):
         self.assertEquals('https://test.blockstack.io/api/wallets', wallets.uri)
         wallets.request = MagicMock(return_value=(object(), {'id': 'alice'}))
         wallet = wallets.get('alice')
-        wallets.request.assert_called_with('GET', 'https://test.blockstack.io/api/wallets/alice/info')
+        wallets.request.assert_called_with('GET', 'https://test.blockstack.io/api/wallets/alice')
         self.assertEqual('alice', wallet.id)
 
     def testTransactionsUri(self):
@@ -68,3 +68,17 @@ class WalletTest(unittest.TestCase):
         wallet.transactions.request.assert_called_with('POST',
                                                        'https://test.blockstack.io/api/wallets/alice/transactions/a1',
                                                        data={'transaction': 'eeee'})
+
+    def testAssets(self):
+        wallets = self.client.wallets
+        wallets.request = MagicMock(return_value=(object(), {'id': 'alice'}))
+        wallet = wallets.get('alice')
+        self.assertEquals('https://test.blockstack.io/api/wallets/alice/assets', wallet.assets.uri)
+        wallet.assets.request = MagicMock(return_value=(object(), [{'name': 'abcd', 'amount': 100}]))
+        assets = wallet.assets.list()
+        wallet.assets.request.assert_called_with('GET',
+                                                 'https://test.blockstack.io/api/wallets/alice/assets',
+                                                 params={})
+        self.assertEqual(1, len(assets))
+        self.assertEqual('abcd', assets[0].name)
+

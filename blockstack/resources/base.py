@@ -244,8 +244,6 @@ class ListResource(Resource):
     def get_instances(self, params):
         """
         Query the list resource for a list of InstanceResources.
-        Raises a :exc:`~twilio.TwilioRestException` if requesting a page of
-        results that does not exist.
         :param dict params: List of URL parameters to be included in request
         """
         resp, page = self.request("GET", self.uri, params=params)

@@ -20,12 +20,12 @@ class BlockstackException(Exception):
 
 
 class BlockstackRestException(BlockstackException):
-    """ A generic 400 or 500 level exception from the Twilio API
+    """ A generic 400 or 500 level exception from the Blockstack API
     :param int status: the HTTP status that was returned for the exception
     :param str uri: The URI that caused the exception
     :param str msg: A human-readable message for the error
     :param str method: The HTTP method used to make the request
-    :param int|None code: A Twilio-specific error code for the error. This is
+    :param int|None code: A Blockstack-specific error code for the error. This is
          not available for all errors.
     """
 
@@ -65,7 +65,7 @@ class BlockstackRestException(BlockstackException):
                     request_was=white("Your request was:"),
                     http_line=teal("%s %s" % (self.method, self.uri)),
                     twilio_returned=white(
-                        "Twilio returned the following information:"),
+                        "Blockstack returned the following information:"),
                     message=blue(str(self.msg))
                 ))
             if self.code:

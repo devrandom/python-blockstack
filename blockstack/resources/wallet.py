@@ -40,14 +40,25 @@ class Transactions(ListResource):
         return self.update_instance(id, kwargs)
 
 
+class Asset(InstanceResource):
+    id_key = 'name'
+
+
+class Assets(ListResource):
+    instance = Asset
+    name = 'assets'
+
+    def __init__(self, *args, **kwargs):
+        super(Assets, self).__init__(*args, **kwargs)
+
+
 class Wallet(InstanceResource):
-    subresources = [Transactions]
+    subresources = [Transactions, Assets]
 
 
 class Wallets(ListResource):
     instance = Wallet
     name = 'wallets'
-    instance_suffix = 'info'
 
     def __init__(self, *args, **kwargs):
         super(Wallets, self).__init__(*args, **kwargs)
