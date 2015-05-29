@@ -30,15 +30,6 @@ class Transactions(ListResource):
         kwargs['transaction'] = transaction
         return self.create_instance(kwargs)
 
-    def sign(self, tx_id, transaction, **kwargs):
-        kwargs['transaction'] = transaction
-        return self.update_instance(tx_id, kwargs)
-
-    def broadcast(self, tx_id, transaction, **kwargs):
-        kwargs['broadcast'] = True
-        kwargs['transaction'] = transaction
-        return self.update_instance(id, kwargs)
-
 
 class Asset(InstanceResource):
     id_key = 'name'

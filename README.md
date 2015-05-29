@@ -29,9 +29,8 @@ Blockstack API (https://blockstack.io/)
     print([t.id for t in alice_txs.list()])
     partial = alice_txs.propose(atomic=True, asset='TRY', address=bob.assetAddress, amount=10000)
     complete = bob_txs.create(atomic=True, asset='USD', address=alice.assetAddress, amount=100, transaction=partial['transaction'])
-    signed1 = alice_txs.sign(complete.id, complete.transaction)
-    signed2 = bob_txs.sign(complete.id, signed1.transaction)
-    committed = bob_txs.broadcast(complete.id, signed2.transaction)
+    signed1 = client.oracles.get('alice').sign(complete.id, complete.transaction)
+    committed = client.oracles.get('bob').broadcast(complete.id, signed1.transaction) # sign and broadcast
 ```
 
 ```

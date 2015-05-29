@@ -1,4 +1,5 @@
 import requests
+from blockstack.resources.oracle import Oracles
 from .resources.wallet import Wallets
 from .util import UNSET_TIMEOUT
 
@@ -23,3 +24,4 @@ class BlockstackClient(object):
         self.base_uri = base_uri
         self.auth = MyAuth(token)
         self.wallets = Wallets(self.base_uri, self.auth, timeout)
+        self.oracles = Oracles(self.base_uri, self.auth, timeout)
