@@ -7,7 +7,8 @@ Blockstack API (https://blockstack.io/)
 
 ```python
     from blockstack.client import BlockstackClient
-    client = BlockstackClient(base_uri='http://localhost:8080/api')
+    token = YOUR_API_TOKEN
+    client = BlockstackClient(base_uri='https://XXX.blockstack.io/', token=token)
     alice = client.wallets.get('alice')
     bob = client.wallets.get('bob')
     print(alice.__dict__.keys())
