@@ -51,7 +51,9 @@ class WalletTest(unittest.TestCase):
 
     def testCreateTransaction(self):
         wallets = self.client.wallets
+        oracles = self.client.oracles
         wallets.request = MagicMock(return_value=(object(), {'id': 'alice'}))
+        oracles.request = MagicMock(return_value=(object(), {'id': 'alice'}))
         wallet = wallets.get('alice')
         wallet.transactions.request = MagicMock(return_value=(MockResponse(200), {'id': 'a1', 'transaction': 'eeee'}))
         other_params = {"asset": "USD",
@@ -64,9 +66,11 @@ class WalletTest(unittest.TestCase):
                                                        'https://test.blockstack.io/api/wallets/alice/transactions',
                                                        data=other_params)
         self.assertEqual(result.id, 'a1')
-        wallet.transactions.sign(result.id, result.transaction)
-        wallet.transactions.request.assert_called_with('POST',
-                                                       'https://test.blockstack.io/api/wallets/alice/transactions/a1',
+        oracle = oracles.get('alice')
+        oracle.transactions.request = MagicMock(return_value=(MockResponse(200), {'id': 'a1', 'transaction': 'eeee'}))
+        oracle.transactions.sign(result.id, result.transaction)
+        oracle.transactions.request.assert_called_with('POST',
+                                                       'https://test.blockstack.io/api/oracles/alice/transactions/a1',
                                                        data={'transaction': 'eeee'})
 
     def testAssets(self):
