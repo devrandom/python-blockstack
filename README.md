@@ -27,10 +27,10 @@ Blockstack API (https://blockstack.io/)
     alice_txs = alice.transactions
     bob_txs = bob.transactions
     print([t.id for t in alice_txs.list()])
-    partial = alice_txs.propose(atomic=True, asset='TRY', address=bob.assetAddress, amount=10000)
-    complete = bob_txs.create(atomic=True, asset='USD', address=alice.assetAddress, amount=100, transaction=partial['transaction'])
-    signed1 = client.oracles.get('alice').sign(complete.id, complete.transaction)
-    committed = client.oracles.get('bob').broadcast(complete.id, signed1.transaction) # sign and broadcast
+    partial = alice_txs.propose(atomic=True, asset='TRY', address=bob.assetAddress, amount=200)
+    complete = bob_txs.create(atomic=True, asset='RUB', address=alice.assetAddress, amount=100, transaction=partial['transaction'])
+    signed1 = client.oracles.get('Green').transactions.sign(complete.id, complete.transaction)
+    committed = client.oracles.get('Blue').transactions.broadcast(complete.id, signed1.transaction) # sign and broadcast
 ```
 
 ```
@@ -47,5 +47,5 @@ Blockstack API (https://blockstack.io/)
 
 ```
     41a5b967732826d37768c588336b5e3ab5a0c4814885a0fb5b924f4dcd9324e2
-    {'USD': 100, 'TRY': -10000, 'Tokens': -20287}
+    {'RUB': 100, 'TRY': -200, 'Tokens': -20287}
 ```
