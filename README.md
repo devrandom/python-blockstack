@@ -7,10 +7,10 @@ Blockstack API (https://blockstack.io/)
 
 ```python
     from blockstack.client import BlockstackClient
-    token = YOUR_API_TOKEN
-    client = BlockstackClient(base_uri='https://XXX.blockstack.io/', token=token)
-    alice = client.wallets.get('alice')
-    bob = client.wallets.get('bob')
+    token = "YOUR_API_TOKEN"
+    client = BlockstackClient(base_uri='https://YOURNAMEHERE.blockstack.io/api', token=token)
+    alice = client.wallets.get('Blue')
+    bob = client.wallets.get('Green')
     print(alice.__dict__.keys())
     print(alice.currentAddress)
     print(alice.currentHeight)
