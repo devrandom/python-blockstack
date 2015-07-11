@@ -24,6 +24,7 @@ setup(
     version=__version__,
     packages=[
         'blockstack',
+        'blockstack.resources',
     ],
     url='https://cryptocorp.co/api',
     license='http://opensource.org/licenses/MIT',
