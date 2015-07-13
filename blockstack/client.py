@@ -22,6 +22,8 @@ class BlockstackClient(object):
         :param base_uri: base URL - e.g. https://test1.blockstack.io/api .  Omit trailing slash.
         """
         self.base_uri = base_uri
-        self.auth = MyAuth(token)
+        self.auth = None
+        if token:
+            self.auth = MyAuth(token)
         self.wallets = Wallets(self.base_uri, self.auth, timeout)
         self.oracles = Oracles(self.base_uri, self.auth, timeout)
