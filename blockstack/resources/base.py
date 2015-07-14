@@ -94,9 +94,9 @@ def make_request(method, uri, **kwargs):
 
     if not resp.ok:
         try:
-            error = json.loads(resp.content)
-            code = error["code"]
-            message = error["message"]
+            error = json.loads(resp.content.decode('utf-8'))
+            code = error["error_code"]
+            message = error["error"]
         except:
             code = None
             message = resp.content
@@ -200,7 +200,7 @@ class InstanceResource(Resource):
     def delete_instance(self):
         """ Make a DELETE request to the API to delete the object
         :return: None, this is purely side effecting
-        :raises: a :class:`~twilio.rest.RestException` on failure
+        :raises: a :class:`~blockstack.util.BlockstackRestException` on failure
         """
         return self.parent.delete(self.name)
 

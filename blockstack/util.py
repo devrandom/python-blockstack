@@ -52,7 +52,7 @@ class BlockstackRestException(BlockstackException):
             return u("\033[36m\033[49m%s\033[0m") % words
 
         def get_uri(code):
-            return "https://www.twilio.com/docs/errors/{0}".format(code)
+            return "https://www.blockstack.io/api/errors#{0}".format(code)
 
         # If it makes sense to print a human readable error message, try to
         # do it. The one problem is that someone might catch this error and
@@ -60,11 +60,11 @@ class BlockstackRestException(BlockstackException):
         if hasattr(sys.stderr, 'isatty') and sys.stderr.isatty():
             msg = (
                 "\n{red_error} {request_was}\n\n{http_line}"
-                "\n\n{twilio_returned}\n\n{message}\n".format(
+                "\n\n{returned}\n\n{message}\n".format(
                     red_error=red("HTTP Error"),
                     request_was=white("Your request was:"),
                     http_line=teal("%s %s" % (self.method, self.uri)),
-                    twilio_returned=white(
+                    returned=white(
                         "Blockstack returned the following information:"),
                     message=blue(str(self.msg))
                 ))
