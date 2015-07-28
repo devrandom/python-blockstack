@@ -51,6 +51,11 @@ class Wallets(ListResource):
     instance = Wallet
     name = 'wallets'
 
+    def create(self, name, mnemonic_phrase, **kwargs):
+        kwargs['name'] = name
+        kwargs['mnemonic'] = mnemonic_phrase
+        return self.create_instance(kwargs)
+
     def __init__(self, *args, **kwargs):
         super(Wallets, self).__init__(*args, **kwargs)
 
