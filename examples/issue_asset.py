@@ -1,9 +1,9 @@
+import os
 from blockstack.client import BlockstackClient
-from blockstack.util import BlockstackRestException
-import time
 
 name = 'T5'
-client = BlockstackClient(base_uri='http://localhost:8080/api')
+token = os.environ.get('BK_TOKEN')
+client = BlockstackClient(base_uri=('%s/api' % os.environ['BK_INSTANCE']), token=token)
 blue = client.wallets.get('Blue')
 issuer = client.issuer
 asset = issuer.assets.create('Blue', 'T5', 1000)

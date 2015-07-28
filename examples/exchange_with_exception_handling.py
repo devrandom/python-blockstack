@@ -1,8 +1,10 @@
+import os
 from blockstack.client import BlockstackClient
 from blockstack.util import BlockstackRestException
 import time
 
-client = BlockstackClient(base_uri='http://localhost:8080/api')
+token = os.environ.get('BK_TOKEN')
+client = BlockstackClient(base_uri=('%s/api' % os.environ['BK_INSTANCE']), token=token)
 alice = client.wallets.get('Blue')
 bob = client.wallets.get('Red')
 alice_oracle = client.oracles.get('Blue')
