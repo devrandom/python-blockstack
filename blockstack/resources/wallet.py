@@ -51,6 +51,10 @@ class Wallets(ListResource):
     instance = Wallet
     name = 'wallets'
 
+    def listnames(self):
+        resp, names = self.request("GET", self.uri)
+        return names
+
     def create(self, name, mnemonic_phrase, **kwargs):
         kwargs['name'] = name
         kwargs['mnemonic'] = mnemonic_phrase
